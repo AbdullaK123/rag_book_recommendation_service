@@ -1,0 +1,23 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "AbdullaK123",email = "abdullamaseeh123@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "fastapi (>=0.115.12,<0.116.0)",
+    "sqlmodel (>=0.0.24,<0.0.25)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "langchain (>=0.3.23,<0.4.0)",
+    "langgraph (>=0.3.29,<0.4.0)",
+    "emails (>=0.6,<0.7)",
+    "alembic (>=1.15.2,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
