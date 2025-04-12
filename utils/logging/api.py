@@ -169,8 +169,3 @@ def init_api_logging():
         json_format=json_format,
         redact_sensitive_data=True
     )
-
-
-# Optional: Initialize logging when this module is imported
-if os.getenv("AUTO_INIT_LOGGING", "true").lower() == "true":
-    init_api_logging()
