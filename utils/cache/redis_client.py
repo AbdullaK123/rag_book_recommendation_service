@@ -44,7 +44,7 @@ def create_redis_client(use_async: bool = False) -> Union[redis.Redis, AsyncRedi
             logger.info("Async Redis client created")
         else:
             # Create synchronous Redis client
-            client = redis_client.Redis(**connection_params)
+            client = redis.Redis(**connection_params)
             logger.info("Synchronous Redis client created")
         
         return client
@@ -73,7 +73,7 @@ class RedisClient:
             logger.error(f"Redis initialization failed: {str(e)}")
             self.client = None
     
-    def get_client(self) -> Optional[Union[redis_client.Redis, AsyncRedis]]:
+    def get_client(self) -> Optional[Union[redis.Redis, AsyncRedis]]:
         """Get the Redis client instance."""
         return self.client
     
