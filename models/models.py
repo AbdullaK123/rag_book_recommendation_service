@@ -3,6 +3,10 @@ from enum import Enum
 from typing import List, Optional
 import json
 from sqlmodel import Field, Relationship, SQLModel
+import uuid
+
+def generate_uuid():
+    return str(uuid.uuid4())
 
 
 # ========== Base Models ==========
@@ -19,8 +23,8 @@ class BookCategoryLink(SQLModel, table=True):
     """Link table for many-to-many relationship between books and categories."""
     __tablename__ = "book_category_links"
 
-    book_id: int = Field(foreign_key="books.id", primary_key=True)
-    category_id: int = Field(foreign_key="categories.id", primary_key=True)
+    book_id: str = Field(foreign_key="books.id", primary_key=True)
+    category_id: str = Field(foreign_key="categories.id", primary_key=True)
 
 
 # ========== Enums ==========
@@ -42,7 +46,7 @@ class User(SQLModel, TimestampMixin, table=True):
     """User model representing a user of the application."""
     __tablename__ = "users"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
     username: str = Field(index=True, unique=True)
     email: str = Field(index=True, unique=True)
     hashed_password: str
@@ -63,7 +67,7 @@ class Book(SQLModel, TimestampMixin, table=True):
     """Book model representing a book in the system."""
     __tablename__ = "books"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
     title: str = Field(index=True)
     author: str = Field(index=True)
     isbn: Optional[str] = Field(default=None, unique=True, index=True)
@@ -92,7 +96,7 @@ class Category(SQLModel, TimestampMixin, table=True):
     """Category model representing book genres and categories."""
     __tablename__ = "categories"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
     name: str = Field(index=True, unique=True)
     description: Optional[str] = None
     
@@ -107,8 +111,8 @@ class UserPreference(SQLModel, TimestampMixin, table=True):
     """Model to store user preferences for recommendations."""
     __tablename__ = "user_preferences"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
-    user_id: int = Field(foreign_key="users.id", index=True, unique=True)
+    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", index=True, unique=True)
     
     # Category preferences (serialized dict with category_id -> weight)
     category_preferences: Optional[str] = None
@@ -152,9 +156,9 @@ class UserBookInteraction(SQLModel, TimestampMixin, table=True):
     """Model to track user interactions with books."""
     __tablename__ = "user_book_interactions"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
-    user_id: int = Field(foreign_key="users.id", index=True)
-    book_id: int = Field(foreign_key="books.id", index=True)
+    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
+    book_id: str = Field(foreign_key="books.id", index=True)
     interaction_type: InteractionType
     rating: Optional[float] = None  # 1-5 star rating
     review_text: Optional[str] = None
@@ -168,9 +172,9 @@ class BookRecommendation(SQLModel, TimestampMixin, table=True):
     """Model to store book recommendations for users."""
     __tablename__ = "book_recommendations"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
-    user_id: int = Field(foreign_key="users.id", index=True)
-    book_id: int = Field(foreign_key="books.id", index=True)
+    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
+    book_id: str = Field(foreign_key="books.id", index=True)
     
     # Recommendation metadata
     score: float  # Recommendation confidence score (0-1)

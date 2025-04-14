@@ -1,8 +1,8 @@
-"""Generated initial schema
+"""Initial schema
 
-Revision ID: d2d414bf2028
+Revision ID: 58fc1154d9e7
 Revises: 
-Create Date: 2025-04-13 12:11:49.099465
+Create Date: 2025-04-14 10:07:28.105238
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'd2d414bf2028'
+revision: str = '58fc1154d9e7'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,7 +25,7 @@ def upgrade() -> None:
     op.create_table('books',
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('title', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('author', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('isbn', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
@@ -47,7 +47,7 @@ def upgrade() -> None:
     op.create_table('categories',
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('description', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.PrimaryKeyConstraint('id')
@@ -57,7 +57,7 @@ def upgrade() -> None:
     op.create_table('users',
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('username', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('email', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('hashed_password', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
@@ -71,8 +71,8 @@ def upgrade() -> None:
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
     op.create_table('book_category_links',
-    sa.Column('book_id', sa.Integer(), nullable=False),
-    sa.Column('category_id', sa.Integer(), nullable=False),
+    sa.Column('book_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('category_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.ForeignKeyConstraint(['book_id'], ['books.id'], ),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
     sa.PrimaryKeyConstraint('book_id', 'category_id')
@@ -80,9 +80,9 @@ def upgrade() -> None:
     op.create_table('book_recommendations',
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('book_id', sa.Integer(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('user_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('book_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('score', sa.Float(), nullable=False),
     sa.Column('reason', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('is_viewed', sa.Boolean(), nullable=False),
@@ -101,9 +101,9 @@ def upgrade() -> None:
     op.create_table('user_book_interactions',
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('book_id', sa.Integer(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('user_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('book_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('interaction_type', sa.Enum('VIEW', 'LIKE', 'DISLIKE', 'BOOKMARK', 'RATE', 'REVIEW', 'RECOMMEND', name='interactiontype'), nullable=False),
     sa.Column('rating', sa.Float(), nullable=True),
     sa.Column('review_text', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
@@ -117,8 +117,8 @@ def upgrade() -> None:
     op.create_table('user_preferences',
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('user_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('category_preferences', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('preferred_language', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('min_page_count', sa.Integer(), nullable=True),
