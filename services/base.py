@@ -1,19 +1,25 @@
 from sqlmodel import Session, select, SQLModel
-from typing import TypeVar, Generic, Type, List, Optional
+from typing import TypeVar, Generic, Type, List, Optional, Any
 from utils.decorators.db import db_exception_handler
+from utils.decorators.cache import cached
+from utils.cache.redis_client import get_redis_client
 
 T = TypeVar('T', bound=SQLModel)
 
 class BaseService(Generic[T]):
     def __init__(self, model: Type[T]):
         self.model = model
+        self.cache = get_redis_client()  # Get Redis client for caching
+        self.cache_prefix = f"{self.__class__.__name__}"  # Use class name as cache prefix
     
     @db_exception_handler
+    @cached(prefix="base_service", ttl=300)  # 5 minute default cache
     async def get_by_id(self, db: Session, id: str) -> Optional[T]:
         """Get a record by ID"""
         return db.exec(select(self.model).where(self.model.id == id)).first()
     
     @db_exception_handler
+    @cached(prefix="base_service", ttl=300)
     async def get_all(self, db: Session) -> List[T]:
         """Get all records"""
         return db.exec(select(self.model)).all()
@@ -52,3 +58,9 @@ class BaseService(Generic[T]):
             db.commit()
             return True
         return False
+    
+    @db_exception_handler
+    async def exists(self, db: Session, id: str) -> bool:
+        """Check if a record exists by ID"""
+        result = await self.get_by_id(db, id)
+        return result is not None

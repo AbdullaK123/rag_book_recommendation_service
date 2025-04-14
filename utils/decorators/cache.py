@@ -7,7 +7,6 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, cast
 import hashlib
 from redis.asyncio import Redis as AsyncRedis
 from redis import Redis
-
 from utils.exceptions.caching import CacheException, CacheSerializationException
 
 logger = logging.getLogger(__name__)
